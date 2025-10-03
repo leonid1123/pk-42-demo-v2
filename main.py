@@ -1,13 +1,48 @@
+#https://github.com/leonid1123/pk-42-demo-v2
 import sys
 from pathlib import Path
-from PyQt6.QtWidgets import QApplication, QWidget
+from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QGridLayout, QLabel, QLineEdit, QPushButton
+from db_handler import Db_handler
 
 
-class MainWindow(QWidget):
+class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setWindowTitle('Авторизация')
+        main_widget = QWidget()
+        self.layout = QGridLayout()
+        main_widget.setLayout(self.layout)
+        self.setCentralWidget(main_widget)
+        self.setUI()
         self.show()
+    
+    def setUI(self):
+        self.layout.addWidget(QLabel('Логин'), 0, 0)
+        self.layout.addWidget(QLabel('Пароль'), 1, 0)
+        self.login_entry = QLineEdit()
+        self.pass_entry = QLineEdit()
+        self.layout.addWidget(self.login_entry,0,1)
+        self.layout.addWidget(self.pass_entry,1,1)
+        self.login_btn = QPushButton("Вход")
+        self.login_btn.clicked.connect(self.login_handler)
+        self.guest_btn = QPushButton("Гость")
+        self.guest_btn.clicked.connect(self.guest_handler)
+        self.layout.addWidget(self.login_btn,3,0,1,2)
+        self.layout.addWidget(self.guest_btn,4,0,1,2)
+
+    def login_handler(self):
+        login_input = self.login_entry.text().strip()
+        pass_input = self.pass_entry.text().strip()
+        db = Db_handler()
+        sql='SELECT password,role FROM users WHERE login=?'
+        db.cur.execute(sql,(login_input,))
+        ans = db.cur.fetchone()
+        print(ans)
+
+
+    def guest_handler(self):
+        pass
+
 
 
 if __name__ == '__main__':

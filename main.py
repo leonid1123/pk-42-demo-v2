@@ -1,8 +1,11 @@
 #https://github.com/leonid1123/pk-42-demo-v2
+#    Set-ExecutionPolicy RemoteSigned
 import sys
 from pathlib import Path
 from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QGridLayout, QLabel, QLineEdit, QPushButton
 from db_handler import Db_handler
+from baseWindow import BaseWindow
+import hashlib
 
 
 class MainWindow(QMainWindow):
@@ -37,11 +40,28 @@ class MainWindow(QMainWindow):
         sql='SELECT password,role FROM users WHERE login=?'
         db.cur.execute(sql,(login_input,))
         ans = db.cur.fetchone()
-        print(ans)
+        if ans:
+            m = hashlib.sha256()
+            m.update(pass_input.encode())
+            if m.hexdigest() == ans[0]:
+                self.base_window = BaseWindow()
+                self.base_window.role_label.setText(self.role_handler(ans[1]))
+                self.base_window.show()
 
-
+       
     def guest_handler(self):
-        pass
+        self.base_window = BaseWindow()
+        self.base_window.role_label.setText('Гость')
+        self.base_window.show()
+
+    def role_handler(self, role_int):
+        if role_int == 2:
+            return "Авторизованный клиент"
+        if role_int == 3:
+            return "Менеджер"
+        if role_int == 4:
+            return "Администратор"
+
 
 
 

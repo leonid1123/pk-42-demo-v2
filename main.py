@@ -1,5 +1,6 @@
 #https://github.com/leonid1123/pk-42-demo-v2
 #    Set-ExecutionPolicy RemoteSigned
+# самостоятельные 10.10-16.10-17.10
 import sys
 from pathlib import Path
 from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QGridLayout, QLabel, QLineEdit, QPushButton

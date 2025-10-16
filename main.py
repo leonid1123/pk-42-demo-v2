@@ -47,6 +47,8 @@ class MainWindow(QMainWindow):
             if m.hexdigest() == ans[0]:
                 self.base_window = BaseWindow()
                 self.base_window.role_label.setText(self.role_handler(ans[1]))
+                db.cur.close()
+                db.cnx.close()
                 self.base_window.show()
 
        

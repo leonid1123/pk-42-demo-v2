@@ -7,3 +7,6 @@ QLineEdit {
 QPushButton {
     font-size: 36px;
 }
+QComboBox {
+    font-size: 36px;
+}

@@ -74,6 +74,7 @@ class BaseWindow(QWidget):
     def set_filter(self):
         input = self.filter.currentText()
         print(input)
+        
 
     def populate_filter(self):
         sql = 'SELECT DISTINCT Поставщик FROM tovar '

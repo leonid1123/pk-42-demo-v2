@@ -4,11 +4,14 @@ from PyQt6.QtWidgets import QApplication, QWidget,\
     QMainWindow, QGridLayout, QLabel, QLineEdit,\
     QPushButton
 from db_handler import DB_handler
+from baseWindow import BaseWindow
 
 
 class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.role = 'Guest'
+        self.FIO = ''
         self.myDb = DB_handler()
         self.setWindowTitle('Обувь')
         
@@ -46,6 +49,10 @@ class MainWindow(QMainWindow):
         if ans is not None:
             if user_input_password == ans[3]:
                 print("успех")
+                self.role = ans[0]
+                self.FIO = ans[1]
+                self.bw = BaseWindow(self.role,self.FIO)
+                self.bw.show()
             else:
                 print("провл")
         

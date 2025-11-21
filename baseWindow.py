@@ -1,15 +1,72 @@
 from PyQt6.QtWidgets import QApplication, QWidget,\
     QMainWindow, QGridLayout, QLabel, QLineEdit,\
-    QPushButton
+    QPushButton, QListWidget, QComboBox
 from db_handler import DB_handler
 
 class BaseWindow(QWidget):
-    def __init__(self, *args, **kwargs):
+    def __init__(self,_role, _fio, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.role = _role
+        self.FIO = _fio 
+        self.setWindowTitle(f"Товары. {self.FIO}, {self.role}")
+        self.myDB = DB_handler()
         layout = QGridLayout()
         self.setLayout(layout)
         #интерфейс
+        self.main_lst = QListWidget()
+        self.filter = QComboBox()#фильтр по поставщику
+        self.up_btn = QPushButton("По возрастанию")#сортировка по количеству на складе
+        self.up_btn.clicked.connect(self.sort_up)
+        self.down_btn = QPushButton("По убыванию")#сортировка по количеству на складе
+        self.down_btn.clicked.connect(self.sort_down)
+        self.txt_search = QLineEdit()#поиск по текстовым полям
+        
+        layout.addWidget(self.main_lst,1,0,1,3)
+        layout.addWidget(self.filter,0,0)
+        layout.addWidget(self.up_btn,0,1)
+        layout.addWidget(self.down_btn,0,2)
+        layout.addWidget(self.txt_search,2,0)
+        self.get_all_and_print()
+        self.set_filter()
         
         #логика
+    def get_all_and_print(self):
+        self.main_lst.clear()
+        sql='SELECT * FROM tovar'
+        self.myDB.cur.execute(sql)
+        ans = self.myDB.cur.fetchone()
+        while ans is not None:
+            txt = f"{ans[0]} {ans[1]} {ans[2]} {ans[3]} {ans[4]} {ans[5]} {ans[6]} {ans[7]} {ans[8]} {ans[9]} "
+            self.main_lst.addItem(txt)
+            ans = self.myDB.cur.fetchone()
+            
+    def sort_up(self):
+        self.main_lst.clear()
+        sql='SELECT * FROM tovar ORDER BY `Кол-во на складе` ASC'
+        self.myDB.cur.execute(sql)
+        ans = self.myDB.cur.fetchone()
+        while ans is not None:
+            txt = f"{ans[0]} {ans[1]} {ans[2]} {ans[3]} {ans[4]} {ans[5]} {ans[6]} {ans[7]} {ans[8]} {ans[9]} "
+            self.main_lst.addItem(txt)
+            ans = self.myDB.cur.fetchone()
+    
+    def sort_down(self):
+        self.main_lst.clear()
+        sql='SELECT * FROM tovar  ORDER BY `Кол-во на складе` DESC'
+        self.myDB.cur.execute(sql)
+        ans = self.myDB.cur.fetchone()
+        while ans is not None:
+            txt = f"{ans[0]} {ans[1]} {ans[2]} {ans[3]} {ans[4]} {ans[5]} {ans[6]} {ans[7]} {ans[8]} {ans[9]} "
+            self.main_lst.addItem(txt)
+            ans = self.myDB.cur.fetchone()
+            
+    def set_filter(self):
+        self.filter.addItem("Все поставщики")
+        sql = 'SELECT DISTINCT `Поставщик` FROM tovar'
+        self.myDB.cur.execute(sql)
+        ans = self.myDB.cur.fetchone()
+        while ans is not None:
+            self.filter.addItem(f"{ans[0]}")
+            ans = self.myDB.cur.fetchone()
         
         

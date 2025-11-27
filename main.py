@@ -12,6 +12,7 @@ class MainWindow(QMainWindow):
         super().__init__(*args, **kwargs)
         self.role = 'Guest'
         self.FIO = ''
+        self.bw = None
         self.myDb = DB_handler()
         self.setWindowTitle('Обувь')
         
@@ -38,7 +39,8 @@ class MainWindow(QMainWindow):
         self.show()
         
     def guest_login(self):
-        pass
+        self.bw = BaseWindow("гость","")
+        self.bw.show()
     
     def password_login(self):
         user_input_login = self.login_entry.text().strip()
@@ -57,9 +59,9 @@ class MainWindow(QMainWindow):
                 print("провл")
         
 
-
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     app.setStyleSheet(Path('login.qss').read_text())
     window = MainWindow()
     sys.exit(app.exec())
+    

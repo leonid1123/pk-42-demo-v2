@@ -7,7 +7,7 @@ class BaseWindow(QWidget):
     def __init__(self,_role, _fio, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.role = _role
-        self.FIO = _fio 
+        self.FIO = _fio
         self.setWindowTitle(f"Товары. {self.FIO}, {self.role}")
         self.myDB = DB_handler()
         layout = QGridLayout()
@@ -68,5 +68,4 @@ class BaseWindow(QWidget):
         while ans is not None:
             self.filter.addItem(f"{ans[0]}")
             ans = self.myDB.cur.fetchone()
-        
         

@@ -1,3 +1,4 @@
+from typing import Any
 from PyQt6.QtWidgets import QApplication, QWidget, \
     QMainWindow, QGridLayout, QLabel, QLineEdit, \
     QPushButton, QListWidget, QComboBox
@@ -41,7 +42,8 @@ class BaseWindow(QWidget):
         self.main_lst.clear()
         sql = 'SELECT * FROM tovar'
         self.myDB.cur.execute(sql)
-        ans = self.myDB.cur.fetchone()
+        self.myDB.conn.commit()
+        ans: tuple[Any, ...] | None = self.myDB.cur.fetchone()
         while ans is not None:
             txt = f"{ans[0]};{ans[1]};{ans[2]};{ans[3]};{ans[4]};{ans[5]};{ans[6]};{ans[7]};{ans[8]};{ans[9]} "
             self.main_lst.addItem(txt)
@@ -51,6 +53,7 @@ class BaseWindow(QWidget):
         self.main_lst.clear()
         sql = 'SELECT * FROM tovar ORDER BY `Кол-во на складе` ASC'
         self.myDB.cur.execute(sql)
+        self.myDB.conn.commit()
         ans = self.myDB.cur.fetchone()
         while ans is not None:
             txt = f"{ans[0]};{ans[1]};{ans[2]};{ans[3]};{ans[4]};{ans[5]};{ans[6]};{ans[7]};{ans[8]};{ans[9]} "
@@ -61,6 +64,7 @@ class BaseWindow(QWidget):
         self.main_lst.clear()
         sql = 'SELECT * FROM tovar  ORDER BY `Кол-во на складе` DESC'
         self.myDB.cur.execute(sql)
+        self.myDB.conn.commit()
         ans = self.myDB.cur.fetchone()
         while ans is not None:
             txt = f"{ans[0]};{ans[1]};{ans[2]};{ans[3]};{ans[4]};{ans[5]};{ans[6]};{ans[7]};{ans[8]};{ans[9]} "
@@ -71,6 +75,7 @@ class BaseWindow(QWidget):
         self.filter.addItem("Все поставщики")
         sql = 'SELECT DISTINCT `Поставщик` FROM tovar'
         self.myDB.cur.execute(sql)
+        self.myDB.conn.commit()
         ans = self.myDB.cur.fetchone()
         while ans is not None:
             self.filter.addItem(f"{ans[0]}")
@@ -82,6 +87,7 @@ class BaseWindow(QWidget):
             self.main_lst.clear()
             sql = 'SELECT * FROM tovar WHERE `Поставщик`=%s'
             self.myDB.cur.execute(sql, (postav,))
+            self.myDB.conn.commit()
             ans = self.myDB.cur.fetchone()
             while ans is not None:
                 txt = f"{ans[0]};{ans[1]};{ans[2]};{ans[3]};{ans[4]};{ans[5]};{ans[6]};{ans[7]};{ans[8]};{ans[9]} "
@@ -94,6 +100,7 @@ class BaseWindow(QWidget):
         user_input = '%' + self.txt_search.text() + '%'
         sql = "SELECT * FROM tovar WHERE `Наименование товара` LIKE %s OR `Поставщик` LIKE %s"
         self.myDB.cur.execute(sql, (user_input, user_input))
+        self.myDB.conn.commit()
         ans = self.myDB.cur.fetchone()
         self.main_lst.clear()
         while ans is not None:

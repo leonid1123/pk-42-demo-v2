@@ -15,7 +15,7 @@ class MainWindow(QMainWindow):
         self.bw = None
         self.myDb = DB_handler()
         self.setWindowTitle('Обувь')
-        
+
         layout = QGridLayout()
         main_widget = QWidget()
         self.setCentralWidget(main_widget)
@@ -28,7 +28,7 @@ class MainWindow(QMainWindow):
         self.pass_entry = QLineEdit()
         self.login_btn = QPushButton("Вход")
         self.login_btn.clicked.connect(self.password_login)
-        self.guest_btn = QPushButton("Гостевой вход")
+        self.guest_btn = QPushButton("Гостевой(admin) вход")
         self.guest_btn.clicked.connect(self.guest_login)
 
         layout.addWidget(self.login_entry, 0, 1)
@@ -39,7 +39,7 @@ class MainWindow(QMainWindow):
         self.show()
 
     def guest_login(self):
-        self.bw = BaseWindow("гость","")
+        self.bw = BaseWindow("Администратор", "")
         self.bw.show()
 
     def password_login(self):

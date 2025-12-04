@@ -58,11 +58,20 @@ class EditWindow(QWidget):
     def edit_entry(self):
         sql = f'''
         UPDATE tovar
-        SET `Артикул` = %s, `Наименование товара`= %s, `Единица измерения`=%s
+        SET `Артикул` = %s, `Наименование товара`= %s, `Единица измерения`=%s,
+            `Цена` = %s, `Поставщик` = %s, `Производитель` = %s, `Категория товара` = %s,
+            `Действующая скидка` = %s, `Кол-во на складе` = %s,
+            `Описание товара` = %s
         WHERE `Артикул`='{self.psevdo_id}';
         '''
         myDb = DB_handler()
-        param = (self.artikul.text(), self.naimenovanie.text(), self.izmerenie.text())
+        param = (self.artikul.text(), 
+        self.naimenovanie.text(), self.izmerenie.text(),
+        int(self.price.text()), self.postav.text(),
+        self.proizv.text(), self.category.text(),
+        int(self.skidka.text()), int(self.kolvo.text()),
+        self.opisanie.text()
+        )
         myDb.cur.execute(sql, param)
         myDb.conn.commit()
         self.close()

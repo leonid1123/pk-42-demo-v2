@@ -1,6 +1,12 @@
 import pymysql.cursors
 
+
 class DB_handler():
+    """
+    класс для подключения к базе данных.\n
+    conn - параметр подключения к БД\n
+    cur - параметр для создания запросов
+    """
     def __init__(self):
         try:
             self.conn = pymysql.connect(

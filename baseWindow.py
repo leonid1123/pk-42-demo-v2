@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import QApplication, QWidget, \
     QPushButton, QListWidget, QComboBox
 from db_handler import DB_handler
 from editWindow import EditWindow
+from zakaz import ZakazWindow
 
 
 class BaseWindow(QWidget):
@@ -29,6 +30,11 @@ class BaseWindow(QWidget):
             self.txt_search.textChanged.connect(self.search_slot)
         else:
             self.txt_search.setPlaceholderText('нет!')
+
+        self.zakaz_btn = QPushButton("Заказы")
+        self.zakaz_btn.clicked.connect(self.open_zakaz_win)
+        layout.addWidget(self.zakaz_btn, 3, 0)
+
         layout.addWidget(self.main_lst, 1, 0, 1, 3)
         layout.addWidget(self.filter, 0, 0)
         layout.addWidget(self.up_btn, 0, 1)
@@ -114,3 +120,8 @@ class BaseWindow(QWidget):
         selected_item_to_edit = line.split(";")
         self.edit_win = EditWindow(selected_item_to_edit)
         self.edit_win.show()
+
+    def open_zakaz_win(self) -> None:
+        self.zakaz_win = ZakazWindow()
+        self.zakaz_win.show()
+

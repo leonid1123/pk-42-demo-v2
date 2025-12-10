@@ -39,7 +39,7 @@ class MainWindow(QMainWindow):
         self.show()
 
     def guest_login(self):
-        self.bw = BaseWindow("Администратор", "")
+        self.bw = BaseWindow("Администратор", "")# временно поставлено для отладки
         self.bw.show()
 
     def password_login(self):
